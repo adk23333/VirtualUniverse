@@ -3,8 +3,11 @@ using UnityEngine.InputSystem;
 
 public class Star1Controller: MonoBehaviour
 {
-    private float gravityConstant = GlobalVar.Instance.gravityConstant;
     public string baseStarTag = "BaseStar"; // BaseStar预制体的标签
+    public float density = 1;
+
+    private float gravityConstant = GlobalVar.Instance.gravityConstant;
+    
 
     void Update()
     {

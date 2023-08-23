@@ -3,11 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Circle
+public struct Star
 {
-    public Vector2 position { get; set; }
-    public float size { get; set; }
-    public float mass { get; set; }
+    public Vector2 position;
+    public float size;
+    public float mass;
+    public float density;
+
+    public Star(Vector2 position, float size, float mass, float density)
+    {
+        this.position = position;
+        this.size = size;
+        this.mass = mass;
+        this.density = density;
+    }
 }
 
 public class InitStar : MonoBehaviour
@@ -17,62 +26,66 @@ public class InitStar : MonoBehaviour
 
     void Start()
     {
-        List<Circle> circleList = GenerateCircles(
-            GlobalVar.Instance.numberOfStars, 
+        List<Star> stars = GenerateCircles(
+            GlobalVar.Instance.numberOfStars,
             GlobalVar.Instance.density,
             GlobalVar.Instance.massLower,
-            GlobalVar.Instance.massUpper, 
+            GlobalVar.Instance.massUpper,
             GlobalVar.Instance.coordinate);
         int i = 1;
-        foreach (Circle circle in circleList)
+        foreach (Star star in stars)
         {
             // 生成预制体实例
-            GameObject instance = Instantiate(prefab, circle.position, Quaternion.identity);
+            GameObject instance = Instantiate(prefab, star.position, Quaternion.identity);
 
             // 给每个实例命名
             instance.name = prefab.tag + i;
             i++;
 
             // 设置大小
-            float scale = circle.size;
+            float scale = star.size;
             instance.transform.localScale = new Vector2(scale, scale);
             Rigidbody2D rb = instance.GetComponent<Rigidbody2D>(); // 获取游戏对象的刚体组件
-            if (rb != null) { rb.mass = circle.mass; }
+            if (rb != null) { rb.mass = star.mass; }
         }
     }
 
-    public List<Circle> GenerateCircles(int n, float density, float massLower, float massUpper, float coordinate)
+    public List<Star> GenerateCircles(int n, float density, float massLower, float massUpper, float coordinate)
     {
-        List<Circle> circles = new List<Circle>();
+        List<Star> star = new List<Star>();
 
         for (int i = 0; i < n; i++)
         {
-            Circle newCircle;
+            Star newStar;
             int j = 0;
             do
             {
-                float mass = UnityEngine.Random.Range(massLower, massUpper);
-                newCircle = new Circle
-                {
-                    position = new Vector2(UnityEngine.Random.Range(-coordinate, coordinate), UnityEngine.Random.Range(-coordinate, coordinate)),
-                    mass = mass,
-                    size = Mathf.Sqrt(mass / GlobalVar.Instance.density / Mathf.PI),
-                };
-                j++;
                 if (j > 100) { throw new TimeoutException("GenerateCircles Timeout"); }
-            } while (IsOverlapping(newCircle, circles));
+                j++;
+                float mass = UnityEngine.Random.Range(massLower, massUpper);
+                newStar = new Star(
+                    new Vector2(
+                        UnityEngine.Random.Range(-coordinate, coordinate),
+                        UnityEngine.Random.Range(-coordinate, coordinate)
+                        ),
+                    Mathf.Sqrt(mass / density / Mathf.PI),
+                    mass,
+                    density
+                    );
+                
+            } while (IsOverlapping(newStar, star));
 
-            circles.Add(newCircle);
+            star.Add(newStar);
         }
 
-        return circles;
+        return star;
     }
 
-    private bool IsOverlapping(Circle newCircle, List<Circle> existingCircles)
+    private bool IsOverlapping(Star newStar, List<Star> existingStars)
     {
-        foreach (var circle in existingCircles)
+        foreach (var star in existingStars)
         {
-            if (Vector2.Distance(newCircle.position, circle.position) < (newCircle.size + circle.size))
+            if (Vector2.Distance(newStar.position, star.position) < (newStar.size + star.size))
             {
                 return true;
             }
