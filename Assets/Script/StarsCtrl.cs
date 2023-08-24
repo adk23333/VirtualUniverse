@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,20 +20,43 @@ public struct Star
     }
 }
 
-public class CamBehaviour : MonoBehaviour
+public class StarsCtrl : MonoBehaviour
 {
     public GameObject prefab; // 预制体
     public string baseStarTag = "BaseStar"; // BaseStar预制体的标签
+
+    public List<GameObject> stars = new List<GameObject>();
+    public RecyclingListView starInfoList;
 
 
     void Start()
     {
         InitStar();
+        starInfoList.ItemCallback = PopulateListItem;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         MoveCamOfLarestStar();
+    }
+
+    public void DelStarInfoListItem(GameObject go)
+    {
+        stars.Remove(go);
+        starInfoList.RowCount = stars.Count;
+    }
+
+    public void SortStarInfos(GameObject go)
+    {
+        stars.Remove(go);
+        stars.Insert(GetIndex(go.GetComponent<Rigidbody2D>().mass), go);
+    }
+
+    private void PopulateListItem(RecyclingListViewItem item, int rowIndex)
+    {
+        var child = item as StarInfoItem;
+        child.starName = stars[rowIndex].transform.name;
+        child.mass = stars[rowIndex].GetComponent<Rigidbody2D>().mass.ToString();
     }
 
     private void MoveCamOfLarestStar()
@@ -52,7 +74,7 @@ public class CamBehaviour : MonoBehaviour
             }
         }
 
-        transform.position = new Vector3(maxMassStar.transform.position.x, maxMassStar.transform.position.y, -10);
+        Camera.main.gameObject.transform.position = new Vector3(maxMassStar.transform.position.x, maxMassStar.transform.position.y, -10);
     }
 
     private void InitStar()
@@ -83,7 +105,30 @@ public class CamBehaviour : MonoBehaviour
                 rb.mass = star.mass;
                 rb.velocity = star.velocity;
             }
+            if (this.stars.Count != 0)
+            {
+                this.stars.Insert(GetIndex(rb.mass), instance);
+
+            }
+            else
+            {
+                this.stars.Add(instance);
+            }
+            
         }
+    }
+
+    private int GetIndex(float mass)
+    {
+        for(int i=0; i<stars.Count; i++)
+        {
+            if (stars[i].GetComponent<Rigidbody2D>().mass < mass)
+            {
+                return i;
+            }
+        }
+        return stars.Count;
+
     }
 
     private List<Star> GenerateCircles(int n, float density, float velocity, float massLower, float massUpper, float coordinate)
