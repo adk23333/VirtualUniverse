@@ -6,7 +6,7 @@ public class BaseStarCtrl : MonoBehaviour
 {
     public string baseStarTag = "BaseStar"; // BaseStar预制体的标签
     public static float density = 1.0f; //密度
-    
+
 
     private float gravityConstant = GlobalVar.Instance.gravityConstant;
     
