@@ -27,10 +27,10 @@ Library: E:\Unity\Virtual Universe\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_
 --assembly-defines=Unity.RenderPipeline.Universal.ShaderLibrary;
 --assembly-defines=Unity.RenderPipelines.Core.Runtime;
 --assembly-defines=Unity.RenderPipelines.Universal.Runtime;
+--assembly-defines=Unity.TextMeshPro;
 --assembly-defines=UnityEngine;
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=E:\Unity\Virtual Universe\Temp\Burst
---debug=Full
 --key-folder=D:/Unity/2022.3.5f1c1/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=E:\Unity\Virtual Universe\Library\Burst
 --output=E:\Unity\Virtual Universe\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated
@@ -65,10 +65,10 @@ Library: E:\Unity\Virtual Universe\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_
 --assembly-defines=Unity.RenderPipeline.Universal.ShaderLibrary;
 --assembly-defines=Unity.RenderPipelines.Core.Runtime;
 --assembly-defines=Unity.RenderPipelines.Universal.Runtime;
+--assembly-defines=Unity.TextMeshPro;
 --assembly-defines=UnityEngine;
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=E:\Unity\Virtual Universe\Temp\Burst
---debug=Full
 --key-folder=D:/Unity/2022.3.5f1c1/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=E:\Unity\Virtual Universe\Library\Burst
 --output=E:\Unity\Virtual Universe\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated

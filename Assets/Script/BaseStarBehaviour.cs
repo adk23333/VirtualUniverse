@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -38,9 +39,20 @@ public class BaseStarCtrl : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameObject starCtrlObj = GameObject.FindGameObjectsWithTag("GameController").First();
-        var starCtrl = starCtrlObj.GetComponent<StarsCtrl>();
-        starCtrl.DelStarInfoListItem(gameObject);
+        try
+        {
+            GameObject starCtrlObj = GameObject.FindGameObjectsWithTag("GameController").First();
+            var starCtrl = starCtrlObj.GetComponent<StarsCtrl>();
+            starCtrl.DelStarInfoListItem(gameObject);
+        }
+        catch(InvalidOperationException e)
+        {
+            Debug.LogWarning(e.Message);
+        }catch(MissingReferenceException e)
+        {
+            Debug.LogWarning(e.Message);
+        }
+        
     }
 
     
@@ -56,7 +68,7 @@ public class BaseStarCtrl : MonoBehaviour
         }
         else
         {
-            MergeStar(otherCollider.gameObject, gameObject);
+            Destroy(gameObject);
         }
     }
 
